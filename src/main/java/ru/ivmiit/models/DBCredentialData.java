@@ -1,7 +1,7 @@
 package ru.ivmiit.models;
 
 public class DBCredentialData {
-    static String username = "azat";
+    static String username = "postgres";
     static String password = "password";
     static String database = "database";
     static String URL = "jdbc:postgresql://localhost:5432/" + database;
