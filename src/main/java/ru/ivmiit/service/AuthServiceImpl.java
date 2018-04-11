@@ -1,7 +1,7 @@
 package ru.ivmiit.service;
 
 import ru.ivmiit.models.User;
-import ru.ivmiit.dao.UserDao;
+import ru.ivmiit.dao.UsersDaoImpl;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +12,10 @@ import java.util.UUID;
 public class AuthServiceImpl implements AuthService {
     private static String authCookieName = "NotAuthCookie";
     private static AuthServiceImpl authServiceImplInstance;
-    private UserDao userRepository;
+    private UsersDaoImpl userRepository;
 
     private AuthServiceImpl(){
-        userRepository = UserDao.getInstance();
+        userRepository = UsersDaoImpl.getInstance();
     }
 
     public static AuthServiceImpl getInstance(){
@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void authorizationByUser(User user, HttpServletResponse response) {
         Service service = ServiceImpl.getInstance();
-        UserDao userRepository = (UserDao)service.getUserRepository();
+        UsersDaoImpl userRepository = (UsersDaoImpl)service.getUserRepository();
         String uuid = UUID.randomUUID().toString();
         user.setSessionID(uuid);
         userRepository.update(user);

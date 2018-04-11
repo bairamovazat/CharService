@@ -1,42 +1,48 @@
 package ru.ivmiit.service;
 
-import ru.ivmiit.dao.BaseDao;
-import ru.ivmiit.dao.CrudDao;
-import ru.ivmiit.dao.ProductDao;
-import ru.ivmiit.dao.UserDao;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import ru.ivmiit.dao.*;
+import ru.ivmiit.models.DBCredentialData;
 
 public class ServiceImpl implements Service {
-    private CrudDao productRepository;
-    private CrudDao userRepository;
-    private AuthService authService;
-
     private static ServiceImpl serviceImplInstance;
 
-    private ServiceImpl(){
-        productRepository = ProductDao.getInstance();
-        userRepository = UserDao.getInstance();
+    private ProductsDao productRepository;
+    private UsersDao userRepository;
+    private AuthService authService;
+
+//    private ServiceImpl() {
+//        //Не создаётся java.lang.NoClassDefFoundError: org/springframework/jdbc/datasource/DriverManagerDataSource
+//        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+//        driverManagerDataSource.setDriverClassName(DBCredentialData.getClassName());
+//        driverManagerDataSource.setUrl(DBCredentialData.getURL());
+//        driverManagerDataSource.setUsername(DBCredentialData.getUsername());
+//        driverManagerDataSource.setPassword(DBCredentialData.getPassword());
+//        productRepository = ProductsDaoImpl.getInstance();
+//        userRepository = new UsersDaoJdbcTemplateImpl(driverManagerDataSource);
+//        authService = AuthServiceImpl.getInstance();
+//    }
+    private ServiceImpl() {
+        productRepository = ProductsDaoImpl.getInstance();
+        userRepository = new UsersDaoHibernateImpl();
         authService = AuthServiceImpl.getInstance();
     }
 
-    private void createBaseDao(){
-        productRepository = new BaseDao();
-        userRepository = UserDao.getInstance();
-        authService = AuthServiceImpl.getInstance();
-    }
-    public static ServiceImpl getInstance(){
-        if(serviceImplInstance == null){
+
+    public static ServiceImpl getInstance() {
+        if (serviceImplInstance == null) {
             serviceImplInstance = new ServiceImpl();
         }
         return serviceImplInstance;
     }
 
     @Override
-    public CrudDao getProductRepository() {
+    public ProductsDao getProductRepository() {
         return productRepository;
     }
 
     @Override
-    public CrudDao getUserRepository() {
+    public UsersDao getUserRepository() {
         return userRepository;
     }
 

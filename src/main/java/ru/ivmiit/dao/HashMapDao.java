@@ -2,11 +2,11 @@ package ru.ivmiit.dao;
 
 import java.util.*;
 
-public class BaseDao implements CrudDao<Long, String> {
+public class HashMapDao implements CrudDao<Long, String> {
     private HashMap<Long, String> dataHashMap;
     private Long lastId;
 
-    public BaseDao() {
+    public HashMapDao() {
         this.lastId = 1L;
         this.dataHashMap = new HashMap<>();
     }

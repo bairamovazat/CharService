@@ -5,6 +5,16 @@ public class DBCredentialData {
     static String password = "password";
     static String database = "database";
     static String URL = "jdbc:postgresql://localhost:5432/" + database;
+    static String className = "org.postgresql.Driver";
+
+
+    public static String getClassName() {
+        return className;
+    }
+
+    public static void setClassName(String className) {
+        DBCredentialData.className = className;
+    }
 
     public static String getUsername() {
         return username;

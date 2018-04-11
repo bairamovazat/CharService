@@ -9,22 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDao implements CrudDao<Long, User> {
+public class UsersDaoImpl implements UsersDao {
 
-    private static UserDao userRepository;
+    private static UsersDaoImpl userRepository;
     private static String tableName = "user";
-
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     private Connection connection;
 
-    private UserDao() {
+    private UsersDaoImpl() {
         try {
             connection = DriverManager.getConnection(DBCredentialData.getURL(), DBCredentialData.getUsername(), DBCredentialData.getPassword());
         } catch (SQLException e) {
@@ -33,16 +25,16 @@ public class UserDao implements CrudDao<Long, User> {
     }
 
     public static void main(String[] args) {
-        UserDao userRepository = new UserDao();
+        UsersDaoImpl userRepository = new UsersDaoImpl();
         User user = new User();
         user.setName("azat");
         user.setPasswordHash("Password_hash");
         user.setSessionID("asd");
     }
 
-    public static UserDao getInstance() {
+    public static UsersDaoImpl getInstance() {
         if (userRepository == null) {
-            userRepository = new UserDao();
+            userRepository = new UsersDaoImpl();
         }
         return userRepository;
     }
@@ -89,6 +81,7 @@ public class UserDao implements CrudDao<Long, User> {
         }
     }
 
+    @Override
     public Optional<User> getUserByNameAndPassword(String user, String password) {
         try {
 
@@ -156,6 +149,7 @@ public class UserDao implements CrudDao<Long, User> {
         }
     }
 
+    @Override
     public Optional<User> getUserBySessionId(String sessionId) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM \"" + tableName + "\" WHERE sessionid = ?;");

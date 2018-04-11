@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ProductDao implements CrudDao<Long, Product> {
-    private static ProductDao productRepository;
+public class ProductsDaoImpl implements ProductsDao {
+    private static ProductsDaoImpl productRepository;
 
     private static String tableName = "product";
+
+    private Connection connection;
 
     static {
         try {
@@ -22,10 +24,7 @@ public class ProductDao implements CrudDao<Long, Product> {
             e.printStackTrace();
         }
     }
-
-    private Connection connection;
-
-    private ProductDao() {
+    private ProductsDaoImpl() {
         try {
             connection = DriverManager.getConnection(DBCredentialData.getURL(), DBCredentialData.getUsername(), DBCredentialData.getPassword());
         } catch (SQLException e) {
@@ -33,9 +32,9 @@ public class ProductDao implements CrudDao<Long, Product> {
         }
     }
 
-    public static ProductDao getInstance() {
+    public static ProductsDaoImpl getInstance() {
         if (productRepository == null) {
-            productRepository = new ProductDao();
+            productRepository = new ProductsDaoImpl();
         }
         return productRepository;
     }
