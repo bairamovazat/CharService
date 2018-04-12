@@ -1,33 +1,35 @@
 package ru.ivmiit.service;
 
+import lombok.SneakyThrows;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import ru.ivmiit.dao.*;
-import ru.ivmiit.models.DBCredentialData;
+
+import java.io.FileInputStream;
+import java.util.Properties;
 
 public class ServiceImpl implements Service {
     private static ServiceImpl serviceImplInstance;
 
-    private ProductsDao productRepository;
+    private MessagesDao messagesDao;
     private UsersDao userRepository;
     private AuthService authService;
+    private Properties properties;
 
-//    private ServiceImpl() {
-//        //Не создаётся java.lang.NoClassDefFoundError: org/springframework/jdbc/datasource/DriverManagerDataSource
-//        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-//        driverManagerDataSource.setDriverClassName(DBCredentialData.getClassName());
-//        driverManagerDataSource.setUrl(DBCredentialData.getURL());
-//        driverManagerDataSource.setUsername(DBCredentialData.getUsername());
-//        driverManagerDataSource.setPassword(DBCredentialData.getPassword());
-//        productRepository = ProductsDaoImpl.getInstance();
-//        userRepository = new UsersDaoJdbcTemplateImpl(driverManagerDataSource);
-//        authService = AuthServiceImpl.getInstance();
-//    }
+    @SneakyThrows
     private ServiceImpl() {
-        productRepository = ProductsDaoImpl.getInstance();
-        userRepository = new UsersDaoHibernateImpl();
-        authService = AuthServiceImpl.getInstance();
-    }
+        properties = new Properties();
+        properties.load(getClass().getResourceAsStream("db.properties"));
 
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName(properties.getProperty("db.driverClassName"));
+        driverManagerDataSource.setUrl(properties.getProperty("db.url"));
+        driverManagerDataSource.setUsername(properties.getProperty("db.username"));
+        driverManagerDataSource.setPassword(properties.getProperty("db.password"));
+
+        messagesDao = new MessagesDaoJdbcTemplateImpl(driverManagerDataSource);
+        userRepository = new UsersDaoJdbcTemplateImpl(driverManagerDataSource);
+        authService = new AuthServiceImpl(userRepository);
+    }
 
     public static ServiceImpl getInstance() {
         if (serviceImplInstance == null) {
@@ -37,8 +39,8 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public ProductsDao getProductRepository() {
-        return productRepository;
+    public MessagesDao getMessagesDao() {
+        return messagesDao;
     }
 
     @Override
@@ -49,5 +51,10 @@ public class ServiceImpl implements Service {
     @Override
     public AuthService getAuthService() {
         return authService;
+    }
+
+    @Override
+    public Properties getProperties() {
+        return properties;
     }
 }

@@ -35,15 +35,6 @@ public class UsersDaoJdbcTemplateImpl implements UsersDao {
                     resultSet.getString("passwordhash"))
     );
 
-//    private RowMapper<User> usersRowMapper = ((resultSet, i) -> {
-//        Long id = resultSet.getLong("id");
-//        User user = new User(id,
-//                resultSet.getString("name"),
-//                resultSet.getString("sessionid"),
-//                resultSet.getString("passwordhash"));
-//        usersHashMap.put(id, user);
-//        return user;
-//    });
 
     public UsersDaoJdbcTemplateImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -74,17 +65,16 @@ public class UsersDaoJdbcTemplateImpl implements UsersDao {
 
     @Override
     public void save(User obj) {
-        jdbcTemplate.query(SQL_INSERT, userRowMapper, obj.getName(), obj.getPasswordHash(), obj.getSessionID());
+        jdbcTemplate.update(SQL_INSERT, obj.getName(), obj.getPasswordHash(), obj.getSessionID());
     }
 
     @Override
     public void update(User obj) {
-        jdbcTemplate.query(SQL_UPDATE, userRowMapper, obj.getName(), obj.getPasswordHash(), obj.getSessionID(), obj.getId());
+        jdbcTemplate.update(SQL_UPDATE, obj.getName(), obj.getPasswordHash(), obj.getSessionID(), obj.getId());
     }
 
     @Override
     public void delete(Long id) {
-
     }
 
     @Override

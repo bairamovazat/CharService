@@ -1,5 +1,6 @@
 package ru.ivmiit.servlets;
 
+import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
 import ru.ivmiit.dao.UsersDaoImpl;
 import ru.ivmiit.service.AuthService;
@@ -55,7 +56,7 @@ public class AuthorizationPage extends HttpServlet{
         String name = req.getParameter("name");
         String password = req.getParameter("password");
 
-        UsersDaoImpl userRepository = (UsersDaoImpl)service.getUserRepository();
+        UsersDao userRepository = service.getUserRepository();
         Optional<User> user = userRepository.getUserByNameAndPassword(name,password);
         if(!user.isPresent()){
             try {

@@ -1,6 +1,5 @@
 package ru.ivmiit.servlets;
 
-import ru.ivmiit.models.Category;
 import ru.ivmiit.models.Product;
 import ru.ivmiit.dao.CrudDao;
 import ru.ivmiit.service.Service;
@@ -22,7 +21,7 @@ public class ProductPage extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        CrudDao productRepository = service.getProductRepository();
+        CrudDao productRepository = service.getMessagesDao();
         PrintWriter writer = resp.getWriter();
         writer.write(
                 "<!DOCTYPE html>\n" +
@@ -55,7 +54,7 @@ public class ProductPage extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        CrudDao<Long, Product> productRepository = service.getProductRepository();
+        CrudDao<Long, Product> productRepository = service.getMessagesDao();
         PrintWriter writer = resp.getWriter();
         String productName = req.getParameter("product-name");
         Category productCategory;

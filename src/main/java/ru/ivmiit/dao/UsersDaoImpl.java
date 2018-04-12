@@ -1,7 +1,6 @@
 package ru.ivmiit.dao;
 
 import lombok.SneakyThrows;
-import ru.ivmiit.models.DBCredentialData;
 import ru.ivmiit.models.User;
 
 import java.sql.*;

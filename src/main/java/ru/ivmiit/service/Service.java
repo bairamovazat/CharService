@@ -1,11 +1,13 @@
 package ru.ivmiit.service;
 
-import ru.ivmiit.dao.CrudDao;
-import ru.ivmiit.dao.ProductsDao;
+import ru.ivmiit.dao.MessagesDao;
 import ru.ivmiit.dao.UsersDao;
 
+import java.util.Properties;
+
 public interface Service {
-    ProductsDao getProductRepository();
+    MessagesDao getMessagesDao();
     UsersDao getUserRepository();
     AuthService getAuthService();
+    Properties getProperties();
 }

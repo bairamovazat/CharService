@@ -1,5 +1,6 @@
 package ru.ivmiit.service;
 
+import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
 import ru.ivmiit.dao.UsersDaoImpl;
 
@@ -12,17 +13,10 @@ import java.util.UUID;
 public class AuthServiceImpl implements AuthService {
     private static String authCookieName = "NotAuthCookie";
     private static AuthServiceImpl authServiceImplInstance;
-    private UsersDaoImpl userRepository;
+    private UsersDao userRepository;
 
-    private AuthServiceImpl(){
-        userRepository = UsersDaoImpl.getInstance();
-    }
-
-    public static AuthServiceImpl getInstance(){
-        if(authServiceImplInstance == null){
-            authServiceImplInstance = new AuthServiceImpl();
-        }
-        return authServiceImplInstance;
+    public AuthServiceImpl(UsersDao userRepository){
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -40,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void authorizationByUser(User user, HttpServletResponse response) {
         Service service = ServiceImpl.getInstance();
-        UsersDaoImpl userRepository = (UsersDaoImpl)service.getUserRepository();
+        UsersDao userRepository = service.getUserRepository();
         String uuid = UUID.randomUUID().toString();
         user.setSessionID(uuid);
         userRepository.update(user);

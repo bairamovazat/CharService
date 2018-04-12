@@ -2,9 +2,9 @@ package ru.ivmiit.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import ru.ivmiit.models.DBCredentialData;
 import ru.ivmiit.models.User;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,12 +13,12 @@ public class UsersDaoHibernateImpl implements UsersDao {
     public static void main(String[] args) {
 
     }
-    public UsersDaoHibernateImpl(){
+    public UsersDaoHibernateImpl(DataSource dataSource){
         Configuration configuration = new Configuration();
-        configuration.setProperty("hibernate.connection.driver_class", DBCredentialData.getClassName());
-        configuration.setProperty("hibernate.connection.url",DBCredentialData.getURL());
-        configuration.setProperty("hibernate.connection.username", DBCredentialData.getUsername());
-        configuration.setProperty("hibernate.connection.password", DBCredentialData.getPassword());
+        configuration.setProperty("hibernate.connection.driver_class", "");
+        configuration.setProperty("hibernate.connection.url","");
+        configuration.setProperty("hibernate.connection.username","");
+        configuration.setProperty("hibernate.connection.password", "");
         configuration.setProperty("hibernate.connection.dialect", "org.hibernate.dialect.PostgreSQL95Dialect");
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
