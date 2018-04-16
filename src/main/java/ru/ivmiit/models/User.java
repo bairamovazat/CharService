@@ -1,14 +1,12 @@
 package ru.ivmiit.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
     private Long id;
     private String name;
@@ -20,4 +18,13 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    @Override
+    public int hashCode() {
+        return name.hashCode() + id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.hashCode() == obj.hashCode();
+    }
 }

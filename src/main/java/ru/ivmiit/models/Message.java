@@ -19,7 +19,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return getText();
+        return "from " + fromUser.getName() + " for " +forUser.getName() + " \"" + getText() + "\"";
     }
 
 }

@@ -1,7 +1,8 @@
-package ru.ivmiit.dao;
+package ru.ivmiit.dao.HibernamteImpl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
 
 import javax.sql.DataSource;
@@ -10,9 +11,6 @@ import java.util.Optional;
 
 public class UsersDaoHibernateImpl implements UsersDao {
 
-    public static void main(String[] args) {
-
-    }
     public UsersDaoHibernateImpl(DataSource dataSource){
         Configuration configuration = new Configuration();
         configuration.setProperty("hibernate.connection.driver_class", "");
@@ -26,6 +24,11 @@ public class UsersDaoHibernateImpl implements UsersDao {
     }
     @Override
     public Optional<User> getUserByNameAndPassword(String user, String password) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> getUserByName(String user) {
         return Optional.empty();
     }
 

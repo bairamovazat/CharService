@@ -3,22 +3,29 @@ package ru.ivmiit.service;
 import lombok.SneakyThrows;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import ru.ivmiit.dao.*;
+import ru.ivmiit.dao.JdbcTemplate.MessagesDaoJdbcTemplateImpl;
+import ru.ivmiit.dao.JdbcTemplate.UsersDaoJdbcTemplateImpl;
+import ru.ivmiit.models.Message;
+import ru.ivmiit.models.User;
 
-import java.io.FileInputStream;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 public class ServiceImpl implements Service {
     private static ServiceImpl serviceImplInstance;
 
-    private MessagesDao messagesDao;
+    private MessagesDao messagesRepository;
     private UsersDao userRepository;
     private AuthService authService;
     private Properties properties;
+    private RegistrationService registrationService;
 
     @SneakyThrows
     private ServiceImpl() {
         properties = new Properties();
-        properties.load(getClass().getResourceAsStream("db.properties"));
+        properties.load(getClass().getResourceAsStream("/db.properties"));
 
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName(properties.getProperty("db.driverClassName"));
@@ -26,9 +33,10 @@ public class ServiceImpl implements Service {
         driverManagerDataSource.setUsername(properties.getProperty("db.username"));
         driverManagerDataSource.setPassword(properties.getProperty("db.password"));
 
-        messagesDao = new MessagesDaoJdbcTemplateImpl(driverManagerDataSource);
+        messagesRepository = new MessagesDaoJdbcTemplateImpl(driverManagerDataSource);
         userRepository = new UsersDaoJdbcTemplateImpl(driverManagerDataSource);
         authService = new AuthServiceImpl(userRepository);
+        registrationService = new RegistrationServiceImpl(userRepository);
     }
 
     public static ServiceImpl getInstance() {
@@ -39,12 +47,12 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public MessagesDao getMessagesDao() {
-        return messagesDao;
+    public MessagesDao getMessagesRepository() {
+        return messagesRepository;
     }
 
     @Override
-    public UsersDao getUserRepository() {
+    public UsersDao getUsersRepository() {
         return userRepository;
     }
 
@@ -56,5 +64,10 @@ public class ServiceImpl implements Service {
     @Override
     public Properties getProperties() {
         return properties;
+    }
+
+    @Override
+    public RegistrationService getRegistrationService(){
+        return registrationService;
     }
 }

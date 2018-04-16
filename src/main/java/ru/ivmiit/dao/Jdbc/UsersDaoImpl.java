@@ -1,6 +1,7 @@
-package ru.ivmiit.dao;
+package ru.ivmiit.dao.Jdbc;
 
 import lombok.SneakyThrows;
+import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
 
 import java.sql.*;
@@ -16,19 +17,6 @@ public class UsersDaoImpl implements UsersDao {
     private Connection connection;
 
     private UsersDaoImpl() {
-        try {
-            connection = DriverManager.getConnection(DBCredentialData.getURL(), DBCredentialData.getUsername(), DBCredentialData.getPassword());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        UsersDaoImpl userRepository = new UsersDaoImpl();
-        User user = new User();
-        user.setName("azat");
-        user.setPasswordHash("Password_hash");
-        user.setSessionID("asd");
     }
 
     public static UsersDaoImpl getInstance() {
@@ -84,7 +72,7 @@ public class UsersDaoImpl implements UsersDao {
     public Optional<User> getUserByNameAndPassword(String user, String password) {
         try {
 
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM \"" + tableName + "\" WHERE name = ? AND passwordhash = ?;");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM \"" + tableName + "\" WHERE name = ? AND password_hash = ?;");
             preparedStatement.setString(1, user);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -105,17 +93,22 @@ public class UsersDaoImpl implements UsersDao {
     }
 
     @Override
+    public Optional<User> getUserByName(String user) {
+        return Optional.empty();
+    }
+
+    @Override
     @SneakyThrows
     public void save(User obj) {
         PreparedStatement preparedStatement;
         if (obj.getId() == null) {
-            preparedStatement = connection.prepareStatement("INSERT INTO \"" + tableName + "\" (name, passwordhash, sessionid) VALUES (?,?,?);");
+            preparedStatement = connection.prepareStatement("INSERT INTO \"" + tableName + "\" (name, password_hash, session_id) VALUES (?,?,?);");
             preparedStatement.setString(1, obj.getName());
             preparedStatement.setString(2, obj.getPasswordHash());
             preparedStatement.setString(3, obj.getSessionID());
             preparedStatement.execute();
         } else {
-            preparedStatement = connection.prepareStatement("INSERT INTO \"" + tableName + "\" (id, name, passwordhash, sessionid) VALUES (?,?,?,?);");
+            preparedStatement = connection.prepareStatement("INSERT INTO \"" + tableName + "\" (id, name, password_hash, session_id) VALUES (?,?,?,?);");
             preparedStatement.setLong(1, obj.getId());
             preparedStatement.setString(2, obj.getName());
             preparedStatement.setString(3, obj.getPasswordHash());
@@ -128,7 +121,7 @@ public class UsersDaoImpl implements UsersDao {
     @SneakyThrows
     public void update(User obj) {
         PreparedStatement preparedStatement;
-        preparedStatement = connection.prepareStatement("UPDATE \"" + tableName + "\" SET name = ?, passwordhash = ?, sessionid = ? WHERE id = ?;");
+        preparedStatement = connection.prepareStatement("UPDATE \"" + tableName + "\" SET name = ?, password_hash = ?, session_id = ? WHERE id = ?;");
         preparedStatement.setString(1, obj.getName());
         preparedStatement.setString(2, obj.getPasswordHash());
         preparedStatement.setString(3, obj.getSessionID());
@@ -151,7 +144,7 @@ public class UsersDaoImpl implements UsersDao {
     @Override
     public Optional<User> getUserBySessionId(String sessionId) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM \"" + tableName + "\" WHERE sessionid = ?;");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM \"" + tableName + "\" WHERE session_id = ?;");
             preparedStatement.setString(1, sessionId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
@@ -160,8 +153,8 @@ public class UsersDaoImpl implements UsersDao {
             User user = new User();
             user.setId(resultSet.getLong("id"));
             user.setName(resultSet.getString("name"));
-            user.setPasswordHash(resultSet.getString("passwordhash"));
-            user.setSessionID(resultSet.getString("sessionid"));
+            user.setPasswordHash(resultSet.getString("password_hash"));
+            user.setSessionID(resultSet.getString("session_id"));
             return Optional.of(user);
         } catch (SQLException e) {
             e.printStackTrace();

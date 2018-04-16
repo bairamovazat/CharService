@@ -2,7 +2,6 @@ package ru.ivmiit.service;
 
 import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
-import ru.ivmiit.dao.UsersDaoImpl;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import java.util.UUID;
 
 public class AuthServiceImpl implements AuthService {
     private static String authCookieName = "NotAuthCookie";
-    private static AuthServiceImpl authServiceImplInstance;
     private UsersDao userRepository;
 
     public AuthServiceImpl(UsersDao userRepository){
@@ -23,6 +21,9 @@ public class AuthServiceImpl implements AuthService {
     public Optional<User> getUserByRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         Optional<User> user = Optional.empty();
+        if(cookies == null){
+            return user;
+        }
         for(Cookie cookie : cookies){
             if(cookie.getName().equals(authCookieName)){
                 user = userRepository.getUserBySessionId(cookie.getValue());
@@ -34,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void authorizationByUser(User user, HttpServletResponse response) {
         Service service = ServiceImpl.getInstance();
-        UsersDao userRepository = service.getUserRepository();
+        UsersDao userRepository = service.getUsersRepository();
         String uuid = UUID.randomUUID().toString();
         user.setSessionID(uuid);
         userRepository.update(user);

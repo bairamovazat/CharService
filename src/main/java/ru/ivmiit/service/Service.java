@@ -6,8 +6,10 @@ import ru.ivmiit.dao.UsersDao;
 import java.util.Properties;
 
 public interface Service {
-    MessagesDao getMessagesDao();
-    UsersDao getUserRepository();
+    MessagesDao getMessagesRepository();
+    UsersDao getUsersRepository();
     AuthService getAuthService();
     Properties getProperties();
+
+    RegistrationService getRegistrationService();
 }

@@ -22,26 +22,9 @@ public class MainServlet extends HttpServlet {
         Service service = ServiceImpl.getInstance();
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        PrintWriter writer = resp.getWriter();
-        writer.write(
-                "<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<head>\n" +
-                        "\t<title></title>\n" +
-                        "\t<meta charset=\"utf-8\">\n" +
-                        "</head>\n" +
-                        "<body>");
-
         AuthService authService = service.getAuthService();
         Optional<User> user = authService.getUserByRequest(req);
-
-        user.ifPresent(user1 -> writer.write("Hi " + user1.getName() + "!<br>" +
-                "<a href=\"/logout\">Выйти</a><br><br>"));
-
-        writer.write("<a href=\"/registration\">Регистрация</a><br>");
-        writer.write("<a href=\"/auth\">Авторизация</a><br>");
-        writer.write("<a href=\"/products\">Все товары</a><br>");
-        writer.write("</body>\n" +
-                "</html>");
+        user.ifPresent(user1 -> req.setAttribute("userName", user1.getName()));
+        getServletContext().getRequestDispatcher("/jsp/main_page.jsp").forward(req,resp);
     }
 }
