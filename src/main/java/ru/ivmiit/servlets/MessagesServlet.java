@@ -42,7 +42,6 @@ public class MessagesServlet extends HttpServlet {
         List<Message> messageList =  messagesRepository.getMessagesByUserId(user.get().getId());
 
         for (Message message : messageList) {
-            //если сообщение от нас, то компаньон for иначе from
             User companion = message.getFromUser().getName().equals(user.get().getName()) ? message.getForUser() : message.getFromUser();
             ArrayList<Message> messages = messagesHashMap.get(companion);
             if (messages == null) {
