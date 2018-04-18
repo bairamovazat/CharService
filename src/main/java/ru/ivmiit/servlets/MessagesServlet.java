@@ -7,6 +7,7 @@ import ru.ivmiit.models.User;
 import ru.ivmiit.service.AuthService;
 import ru.ivmiit.service.Service;
 import ru.ivmiit.service.ServiceImpl;
+import ru.ivmiit.service.SpringService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,15 +19,11 @@ import java.util.*;
 
 @WebServlet("/messages")
 public class MessagesServlet extends HttpServlet {
-    private Service service = ServiceImpl.getInstance();
+    private Service service = SpringService.getInstance();
     private MessagesDao messagesRepository = service.getMessagesRepository();
     private UsersDao usersRepository = service.getUsersRepository();
     private AuthService authService = service.getAuthService();
 
-    @Override
-    public void init() throws ServletException {
-
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -42,7 +39,7 @@ public class MessagesServlet extends HttpServlet {
         List<Message> messageList =  messagesRepository.getMessagesByUserId(user.get().getId());
 
         for (Message message : messageList) {
-            User companion = message.getFromUser().getName().equals(user.get().getName()) ? message.getForUser() : message.getFromUser();
+            User companion = message.getUser().getName().equals(user.get().getName()) ? message.getCompanion() : message.getUser();
             ArrayList<Message> messages = messagesHashMap.get(companion);
             if (messages == null) {
                 messages = new ArrayList<>();
@@ -63,32 +60,32 @@ public class MessagesServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         String userId = req.getParameter("user-id");
         String userName = req.getParameter("user-name");
-        Optional<User> forUser;
+        Optional<User> companion;
         if(userId == null && userName == null){
             resp.sendRedirect("?error=Invalid data");
             return;
         }else if(userId != null){
-            forUser = usersRepository.find(Long.parseLong(userId));
+            companion = usersRepository.find(Long.parseLong(userId));
         }else {
-            forUser = usersRepository.getUserByName(userName);
+            companion = usersRepository.getUserByName(userName);
         }
-        Optional<User> fromUser = authService.getUserByRequest(req);
+        Optional<User> user = authService.getUserByRequest(req);
         String text = req.getParameter("text");
 
 
 
-        if (!fromUser.isPresent()) {
+        if (!user.isPresent()) {
             resp.sendRedirect("/auth?error=Please login");
             return;
-        } else if (!forUser.isPresent()) {
+        } else if (!companion.isPresent()) {
             resp.sendRedirect("?error=User not fount");
             return;
         }
 
         Message message = Message.builder()
                 .text(text)
-                .forUser(forUser.get())
-                .fromUser(fromUser.get())
+                .companion(companion.get())
+                .user(user.get())
                 .sendDate(new Date())
                 .isRead(false)
                 .build();
@@ -97,7 +94,7 @@ public class MessagesServlet extends HttpServlet {
         if(userId != null){
             resp.sendRedirect("?activeMessages=" + userId);
         }else{
-            resp.sendRedirect("?activeMessages=" + forUser.get().getId());
+            resp.sendRedirect("?activeMessages=" + companion.get().getId());
         }
     }
 

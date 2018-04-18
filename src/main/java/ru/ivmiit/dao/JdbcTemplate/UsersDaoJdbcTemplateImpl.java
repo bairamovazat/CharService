@@ -2,6 +2,7 @@ package ru.ivmiit.dao.JdbcTemplate;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
 
@@ -14,7 +15,7 @@ public class UsersDaoJdbcTemplateImpl implements UsersDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    private String tableName = "user";
+    private String tableName = "messenger_user";
     //language=SQL
     private String SQL_FIND= "SELECT * FROM \"" + tableName + "\" WHERE id=?;";
     //language=SQL
@@ -85,12 +86,12 @@ public class UsersDaoJdbcTemplateImpl implements UsersDao {
 
     @Override
     public void save(User obj) {
-        jdbcTemplate.update(SQL_INSERT, obj.getName(), obj.getPasswordHash(), obj.getSessionID());
+        jdbcTemplate.update(SQL_INSERT, obj.getName(), obj.getPasswordHash(), obj.getSessionId());
     }
 
     @Override
     public void update(User obj) {
-        jdbcTemplate.update(SQL_UPDATE, obj.getName(), obj.getPasswordHash(), obj.getSessionID(), obj.getId());
+        jdbcTemplate.update(SQL_UPDATE, obj.getName(), obj.getPasswordHash(), obj.getSessionId(), obj.getId());
     }
 
     @Override

@@ -9,7 +9,5 @@ public interface Service {
     MessagesDao getMessagesRepository();
     UsersDao getUsersRepository();
     AuthService getAuthService();
-    Properties getProperties();
-
     RegistrationService getRegistrationService();
 }

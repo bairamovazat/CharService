@@ -12,14 +12,14 @@ import java.util.Date;
 public class Message {
     private Long id;
     private String text;
-    private User fromUser;
-    private User forUser;
+    private User user;
+    private User companion;
     private Date sendDate;
     private boolean isRead;
 
     @Override
     public String toString() {
-        return "from " + fromUser.getName() + " for " +forUser.getName() + " \"" + getText() + "\"";
+        return "from " + user.getName() + " for " + companion.getName() + " \"" + getText() + "\"";
     }
 
 }

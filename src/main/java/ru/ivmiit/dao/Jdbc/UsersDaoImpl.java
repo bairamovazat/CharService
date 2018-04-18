@@ -39,7 +39,7 @@ public class UsersDaoImpl implements UsersDao {
             user.setId(resultSet.getLong("id"));
             user.setName(resultSet.getString("name"));
             user.setPasswordHash(resultSet.getString("passwordhash"));
-            user.setSessionID(resultSet.getString("sessionid"));
+            user.setSessionId(resultSet.getString("sessionid"));
             return Optional.of(user);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class UsersDaoImpl implements UsersDao {
                 user.setId(resultSet.getLong("id"));
                 user.setName(resultSet.getString("name"));
                 user.setPasswordHash(resultSet.getString("passwordhash"));
-                user.setSessionID(resultSet.getString("sessionid"));
+                user.setSessionId(resultSet.getString("sessionid"));
                 users.add(user);
             }
             return users;
@@ -81,7 +81,7 @@ public class UsersDaoImpl implements UsersDao {
                 userObj.setId(resultSet.getLong("id"));
                 userObj.setName(resultSet.getString("name"));
                 userObj.setPasswordHash(resultSet.getString("passwordhash"));
-                userObj.setSessionID(resultSet.getString("sessionid"));
+                userObj.setSessionId(resultSet.getString("sessionid"));
                 return Optional.of(userObj);
             } else {
                 return Optional.empty();
@@ -105,14 +105,14 @@ public class UsersDaoImpl implements UsersDao {
             preparedStatement = connection.prepareStatement("INSERT INTO \"" + tableName + "\" (name, password_hash, session_id) VALUES (?,?,?);");
             preparedStatement.setString(1, obj.getName());
             preparedStatement.setString(2, obj.getPasswordHash());
-            preparedStatement.setString(3, obj.getSessionID());
+            preparedStatement.setString(3, obj.getSessionId());
             preparedStatement.execute();
         } else {
             preparedStatement = connection.prepareStatement("INSERT INTO \"" + tableName + "\" (id, name, password_hash, session_id) VALUES (?,?,?,?);");
             preparedStatement.setLong(1, obj.getId());
             preparedStatement.setString(2, obj.getName());
             preparedStatement.setString(3, obj.getPasswordHash());
-            preparedStatement.setString(4, obj.getSessionID());
+            preparedStatement.setString(4, obj.getSessionId());
             preparedStatement.execute();
         }
     }
@@ -124,7 +124,7 @@ public class UsersDaoImpl implements UsersDao {
         preparedStatement = connection.prepareStatement("UPDATE \"" + tableName + "\" SET name = ?, password_hash = ?, session_id = ? WHERE id = ?;");
         preparedStatement.setString(1, obj.getName());
         preparedStatement.setString(2, obj.getPasswordHash());
-        preparedStatement.setString(3, obj.getSessionID());
+        preparedStatement.setString(3, obj.getSessionId());
         preparedStatement.setLong(4, obj.getId());
         preparedStatement.execute();
 
@@ -154,7 +154,7 @@ public class UsersDaoImpl implements UsersDao {
             user.setId(resultSet.getLong("id"));
             user.setName(resultSet.getString("name"));
             user.setPasswordHash(resultSet.getString("password_hash"));
-            user.setSessionID(resultSet.getString("session_id"));
+            user.setSessionId(resultSet.getString("session_id"));
             return Optional.of(user);
         } catch (SQLException e) {
             e.printStackTrace();

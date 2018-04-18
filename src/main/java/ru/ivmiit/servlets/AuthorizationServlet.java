@@ -3,7 +3,9 @@ package ru.ivmiit.servlets;
 import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
 import ru.ivmiit.service.AuthService;
+import ru.ivmiit.service.Service;
 import ru.ivmiit.service.ServiceImpl;
+import ru.ivmiit.service.SpringService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 @WebServlet("/auth")
 public class AuthorizationServlet extends HttpServlet{
+    private Service service = SpringService.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -27,7 +31,6 @@ public class AuthorizationServlet extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        ServiceImpl service = ServiceImpl.getInstance();
         AuthService authService = service.getAuthService();
 
         String name = req.getParameter("name");

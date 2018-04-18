@@ -1,5 +1,7 @@
 package ru.ivmiit.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.ivmiit.dao.UsersDao;
 import ru.ivmiit.models.User;
 
@@ -9,12 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import java.util.UUID;
 
+@Component
 public class AuthServiceImpl implements AuthService {
     private static String authCookieName = "NotAuthCookie";
-    private UsersDao userRepository;
 
-    public AuthServiceImpl(UsersDao userRepository){
-        this.userRepository = userRepository;
+    @Autowired
+    private UsersDao usersRepository;
+
+    public AuthServiceImpl(){}
+
+    @Deprecated
+    public AuthServiceImpl(UsersDao usersRepository){
+        this.usersRepository = usersRepository;
     }
 
     @Override
@@ -26,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
         }
         for(Cookie cookie : cookies){
             if(cookie.getName().equals(authCookieName)){
-                user = userRepository.getUserBySessionId(cookie.getValue());
+                user = usersRepository.getUserBySessionId(cookie.getValue());
             }
         }
         return user;
@@ -34,17 +42,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void authorizationByUser(User user, HttpServletResponse response) {
-        Service service = ServiceImpl.getInstance();
-        UsersDao userRepository = service.getUsersRepository();
         String uuid = UUID.randomUUID().toString();
-        user.setSessionID(uuid);
-        userRepository.update(user);
+        user.setSessionId(uuid);
+        usersRepository.update(user);
         Cookie cookie = new Cookie(authCookieName,uuid);
         response.addCookie(cookie);
     }
 
     @Override
-    public void logout( HttpServletResponse response) {
+    public void logout(HttpServletResponse response) {
         Cookie cookie = new Cookie(authCookieName, "");
         response.addCookie(cookie);
     }

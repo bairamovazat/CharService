@@ -1,0 +1,18 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "ru.ivmiit.models.User" table = "messenger_user">
+
+        <id name = "id" type = "java.lang.Long" column = "id">
+            <generator class="identity"/>
+        </id>
+
+        <property name = "name" column = "name" length="255" not-null="true" unique="true"/>
+        <property name = "passwordHash" column = "password_hash" length="255"/>
+        <property name = "sessionId" column = "session_id" length="255"/>
+
+    </class>
+</hibernate-mapping>
