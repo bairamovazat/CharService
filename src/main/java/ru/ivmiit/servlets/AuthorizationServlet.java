@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
+
 @WebServlet("/auth")
-public class AuthorizationServlet extends HttpServlet{
+public class AuthorizationServlet extends HttpServlet {
     private Service service = SpringService.getInstance();
+    private AuthService authService = service.getAuthService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,30 +30,18 @@ public class AuthorizationServlet extends HttpServlet{
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        AuthService authService = service.getAuthService();
-
         String name = req.getParameter("name");
         String password = req.getParameter("password");
 
-        UsersDao userRepository = service.getUsersRepository();
-        Optional<User> user = userRepository.getUserByNameAndPassword(name,password);
-        if(!user.isPresent()){
-            try {
-                resp.sendRedirect("?error=Bad login or password");
-                return;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        Optional<User> user = authService.authorizationUserByLoginAndPassword(name, password, resp);
+        if (!user.isPresent()) {
+            resp.sendRedirect("?error=Bad login or password");
+            return;
         }
-        authService.authorizationByUser(user.get(),resp);
-        try {
-            resp.sendRedirect("/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        resp.sendRedirect("/");
 
     }
 }

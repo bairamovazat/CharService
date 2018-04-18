@@ -6,7 +6,6 @@ import ru.ivmiit.models.Message;
 import ru.ivmiit.models.User;
 import ru.ivmiit.service.AuthService;
 import ru.ivmiit.service.Service;
-import ru.ivmiit.service.ServiceImpl;
 import ru.ivmiit.service.SpringService;
 
 import javax.servlet.ServletException;
@@ -27,7 +26,7 @@ public class MessagesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<User> user = authService.getUserByRequest(req);
+        Optional<User> user = authService.authenticateUserByRequest(req);
         if (!user.isPresent()) {
             resp.sendRedirect("/auth?error=Please login");
             return;
@@ -69,7 +68,7 @@ public class MessagesServlet extends HttpServlet {
         }else {
             companion = usersRepository.getUserByName(userName);
         }
-        Optional<User> user = authService.getUserByRequest(req);
+        Optional<User> user = authService.authenticateUserByRequest(req);
         String text = req.getParameter("text");
 
 

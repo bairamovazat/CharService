@@ -52,9 +52,7 @@ public class MessagesDaoJdbcTemplateImpl implements MessagesDao {
                 .user(fromUser)
                 .build();
     };
-
-
-
+    
     public MessagesDaoJdbcTemplateImpl(DriverManagerDataSource driverManagerDataSource){
         this.jdbcTemplate = new JdbcTemplate(driverManagerDataSource);
     }

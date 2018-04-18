@@ -1,5 +1,6 @@
 package ru.ivmiit.service;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.ivmiit.dao.UsersDao;
@@ -26,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Optional<User> getUserByRequest(HttpServletRequest request) {
+    public Optional<User> authenticateUserByRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         Optional<User> user = Optional.empty();
         if(cookies == null){
@@ -53,5 +54,15 @@ public class AuthServiceImpl implements AuthService {
     public void logout(HttpServletResponse response) {
         Cookie cookie = new Cookie(authCookieName, "");
         response.addCookie(cookie);
+    }
+
+    @Override
+    public Optional<User> authorizationUserByLoginAndPassword(String userName, String password, HttpServletResponse response){
+        Optional<User> user = usersRepository.getUserByName(userName);
+        if(!user.isPresent() || !BCrypt.checkpw(password, user.get().getPasswordHash())){
+            return Optional.empty();
+        }
+        authorizationByUser(user.get(),response);
+        return user;
     }
 }

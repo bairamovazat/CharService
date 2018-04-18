@@ -1,9 +1,5 @@
 package ru.ivmiit.servlets;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.ivmiit.AppConfig;
 import ru.ivmiit.models.User;
 import ru.ivmiit.service.*;
 
@@ -24,7 +20,7 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        Optional<User> user = service.getAuthService().getUserByRequest(req);
+        Optional<User> user = service.getAuthService().authenticateUserByRequest(req);
         user.ifPresent(user1 -> req.setAttribute("userName", user1.getName()));
         getServletContext().getRequestDispatcher("/jsp/main_page.jsp").forward(req,resp);
     }

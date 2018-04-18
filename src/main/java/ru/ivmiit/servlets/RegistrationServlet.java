@@ -1,9 +1,9 @@
 package ru.ivmiit.servlets;
 
+import org.mindrot.jbcrypt.BCrypt;
 import ru.ivmiit.models.User;
 import ru.ivmiit.service.RegistrationService;
 import ru.ivmiit.service.Service;
-import ru.ivmiit.service.ServiceImpl;
 import ru.ivmiit.service.SpringService;
 
 import javax.servlet.ServletException;
@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
     private Service service = SpringService.getInstance();
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,7 +41,7 @@ public class RegistrationServlet extends HttpServlet {
         }
 
         RegistrationService registrationService = service.getRegistrationService();
-        User user = new User(name, password);
+        User user = new User(name, hashPassword(password));
 
         try {
             registrationService.registerUser(user);
@@ -52,5 +52,10 @@ public class RegistrationServlet extends HttpServlet {
         }
 
         resp.sendRedirect("/");
+    }
+
+    private String hashPassword(String password){
+        String salt = BCrypt.gensalt(12);
+        return BCrypt.hashpw(password, salt);
     }
 }
