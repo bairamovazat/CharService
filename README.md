@@ -6,7 +6,9 @@ Using spring-boot-starter-web
 # Доступ
 https://fix-simple-chat.herokuapp.com
 (!) Может сначала минуы 2-3 грузиться т.к уходит в сон
-Данные для авторизации test:test
+#### Данные для авторизации 
+login: test
+password: test
 ## Функционал
 1) Регистрироваться
 2) Создавать чат
