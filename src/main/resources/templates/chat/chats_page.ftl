@@ -1,22 +1,6 @@
 <#ftl encoding='UTF-8'>
-
-<html>
-<head>
-    <title></title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
-</head>
-<body class="container-fluid">
+<#include "../header.ftl">
+<div class="container-fluid">
 <div class="row">
     <div class="card col-sm-12 col-md-12 col-lg-4 col-xl-3 p-0">
         <div class="card-body">
@@ -90,11 +74,14 @@
                             </div>
                         </div>
                     </#list>
-                    <form method="post" action="/chats/send">
-                        <input class="d-none" type="text" name="chatId" value="${chat.id}">
-                        <textarea class="form-control" name="message" placeholder="Сообщение"></textarea>
-                        <input class="form-control" type="submit" value="Отправить">
-                    </form>
+
+                    <div class="col-md-offset-5 col-lg-offset-4 col-xl-offset-3 col-sm-12 col-md-7 col-lg-8 col-xl-9 col-sm-12" style="position: fixed; bottom: 0px; right: 0px;">
+                        <form class="" method="post" action="/chats/send">
+                            <input class="d-none" type="text" name="user-id" value="${chat.id}}">
+                            <textarea class="form-control" name="text" placeholder="Сообщение"></textarea>
+                            <input class="form-control" type="submit" value="Отправить">
+                        </form>
+                    </div>
 
                 </div>
             </div>
@@ -122,5 +109,5 @@
         </div>
     </div>
 </div>
+</div>
 </body>
-</html>

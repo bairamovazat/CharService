@@ -1,7 +1,5 @@
 <#ftl encoding='UTF-8'>
+<#include "header.ftl">
 
-<head>
-</head>
-<body>
 <h1>Успешно зарегистрировались!</h1>
 </body>

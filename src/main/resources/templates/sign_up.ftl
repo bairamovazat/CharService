@@ -1,10 +1,5 @@
 <#ftl encoding='UTF-8'>
-<head>
-    <head>
-        <link href="/css/bootstrap.min.css" rel="stylesheet"/>
-    </head>
-</head>
-<body>
+<#include "header.ftl">
 <#if error??>
 <div class="alert alert-danger" role="alert">${error}</div>
 </#if>

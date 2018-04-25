@@ -1,7 +1,5 @@
-<head>
-    <link href="/css/style.css" rel="stylesheet"/>
-</head>
-<body>
+<#include "header.ftl">
+
 <table>
     <tr>
         <th>ID</th>
