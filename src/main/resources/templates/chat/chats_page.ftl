@@ -75,7 +75,11 @@
                         </div>
                     </#list>
 
+<<<<<<< HEAD
                     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-9 p-0" style="position: fixed; bottom: 0px; right: 0px;">
+=======
+                    <div class="col-md-offset-5 col-lg-offset-4 col-xl-offset-3 col-sm-12 col-md-7 col-lg-8 col-xl-9 col-sm-12" style="position: fixed; bottom: 0px; right: 0px;">
+>>>>>>> 12f996a5cadb593e79ae0a8732ee12ef349b60f1
                         <form class="" method="post" action="/chats/send">
                             <input class="d-none" type="text" name="user-id" value="${chat.id}}">
                             <textarea class="form-control" name="text" placeholder="Сообщение"></textarea>
