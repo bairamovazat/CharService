@@ -76,7 +76,7 @@ public class ChatController {
     }
 
     @PostMapping("/chats/send")
-    public String sendMessage(@ModelAttribute("userForm") SendMessageForm sendMessageForm,
+    public String sendMessage(@ModelAttribute("messageForm") SendMessageForm sendMessageForm,
                               Authentication authentication,
                               @ModelAttribute("model") ModelMap model) {
         User user = service.getUserByAuthentication(authentication);
