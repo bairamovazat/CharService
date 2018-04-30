@@ -1,8 +1,6 @@
 package ru.ivmiit.models;
 
 import lombok.*;
-import ru.ivmiit.security.role.Role;
-import ru.ivmiit.security.states.State;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,17 +26,11 @@ public class User {
     @ManyToMany(mappedBy = "members", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Chat> chats;
 
-    private UUID uuid;
-    private String status;
-    private String phone;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Enumerated(EnumType.STRING)
     private State state;
-
-    private String hashTempPassword;
 
     private String email;
 }

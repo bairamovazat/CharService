@@ -5,13 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * 10.11.2017
- * UserRegistrationForm
- *
- * @author Sidikov Marsel (First Software Engineering Platform)
- * @version v1.0
- */
 @Getter
 @Setter
 @AllArgsConstructor

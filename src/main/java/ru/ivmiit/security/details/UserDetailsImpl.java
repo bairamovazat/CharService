@@ -1,34 +1,31 @@
 package ru.ivmiit.security.details;
 
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.ivmiit.models.Role;
+import ru.ivmiit.models.State;
 import ru.ivmiit.models.User;
-import ru.ivmiit.security.states.State;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
-/**
- * 05.08.2017
- *
- * @author Marsel Sidikov (First Software Engineering Platform)
- * @version 1.0
- */
-// класс, который помогает спрингу понять, как устроена ваша сущность для авторизации
 public class UserDetailsImpl implements UserDetails {
 
     private User user;
 
-    public UserDetailsImpl(User user) {
+    public UserDetailsImpl(User user){
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
-        return Collections.singletonList(authority);
+        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+        if(user.getRole().equals(Role.ADMIN)){
+            authorities.add(new SimpleGrantedAuthority(Role.USER.name()));
+        }
+        return authorities;
     }
 
     @Override
@@ -48,7 +45,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getState().equals(State.BANNED);
     }
 
     @Override
@@ -58,10 +55,11 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.user.getState().equals(State.CONFIRMED);
+        return user.getState().equals(State.ACTIVATED);
     }
 
-    public User getUser() {
+    public User getUser(){
         return user;
     }
 }
+

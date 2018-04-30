@@ -10,7 +10,6 @@
     <tr>
         <td>${user.id}</td>
         <td>${user.login}</td>
-        <td><a href="/admin/password/temp/${user.id}">Пароль</a></td>
     </tr>
 </#list>
 </table>

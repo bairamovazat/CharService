@@ -7,20 +7,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.ivmiit.models.Role;
 import ru.ivmiit.models.User;
-import ru.ivmiit.security.role.Role;
 import ru.ivmiit.services.AuthenticationService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-/**
- * 10.11.2017
- * AuthController
- *
- * @author Sidikov Marsel (First Software Engineering Platform)
- * @version v1.0
- */
 @Controller
 public class AuthController {
 
@@ -50,9 +43,9 @@ public class AuthController {
         if (authentication != null) {
             User user = service.getUserByAuthentication(authentication);
             if (user.getRole().equals(Role.USER)) {
-                return "redirect:/user/profile";
+                return "redirect:/chats";
             } else if (user.getRole().equals(Role.ADMIN)) {
-                return "redirect:/admin/users";
+                return "redirect:/admin/";
             }
         }
         return "redirect:/login";

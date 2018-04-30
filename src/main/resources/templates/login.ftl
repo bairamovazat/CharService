@@ -7,6 +7,7 @@
     <form class="form-horizontal" action="/login" method="post">
         <input name="login" placeholder="Логин">
         <input name="password" placeholder="Пароль">
-        <input type="submit">
+        <label for="remember-me">
+            <input type="checkbox" id="remember-me" name="remember-me">Запомнить меня</label> <input type="submit">
     </form>
 </body>
