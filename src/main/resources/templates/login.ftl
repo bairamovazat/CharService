@@ -1,11 +1,7 @@
 <#ftl encoding='UTF-8'>
 <#include "header.ftl">
 
-<div class="row">
-    <div class="col-6 offset-1">
-         <#if model.error.isPresent()>
-        <div class="alert alert-danger" role="alert">Логин или пароль введены неверно</div>
-         </#if>
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
         <form action="/login" method="post">
             <div class="form-group">
                 <label for="login">Логин</label>
@@ -31,6 +27,5 @@
             <button type="submit" class="btn btn-primary">Отправить</button>
         </form>
     </div>
-</div>
-
 <#include "footer.ftl">
+

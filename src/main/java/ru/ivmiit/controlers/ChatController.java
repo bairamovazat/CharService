@@ -98,7 +98,7 @@ public class ChatController {
         if (!chat.isPresent()) {
             redirectAttributes.addAttribute("error", "Чат не найден");
             return "redirect:/chats";
-        } else if(chat.get().getMembers().contains(user)){
+        } else if(chat.get().getMembers().contains(newMember)){
             redirectAttributes.addAttribute("error", "Пользователь уже добавлен");
             return "redirect:/chat/" + addMemberForm.getChatId();
         } if (!newMember.isPresent()) {
@@ -106,7 +106,7 @@ public class ChatController {
             return "redirect:/chat/" + addMemberForm.getChatId();
         } else {
             chatService.addMemberToChat(newMember.get(), chat.get());
-            return "redirect:/chats";
+            return "redirect:/chat/" + addMemberForm.getChatId();
         }
     }
 

@@ -1,5 +1,6 @@
 <#ftl encoding='UTF-8'>
 <#include "header.ftl">
-
-<h1>Успешно зарегистрировались!</h1>
-</body>
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+        <h2>Успешно зарегистрировались!</h2>
+    </div
+<#include "footer.ftl">

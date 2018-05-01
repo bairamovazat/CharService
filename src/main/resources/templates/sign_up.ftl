@@ -1,7 +1,6 @@
 <#ftl encoding='UTF-8'>
 <#include "header.ftl">
-
-    <div class="col-6 offset-1">
+    <div class="col-sm-12 col-md-10 col-lg-6 col-xl-6 offset-lg-1 offset-xl-1">
         <#if error??>
             <div class="alert alert-danger" role="alert">${error}</div>
         </#if>
@@ -34,6 +33,4 @@
             <button type="submit" class="btn btn-primary">Отправить</button>
         </form>
     </div>
-
 <#include "footer.ftl">
-</body>
