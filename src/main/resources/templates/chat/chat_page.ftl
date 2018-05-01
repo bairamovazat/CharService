@@ -3,17 +3,24 @@
 <div class="container-fluid">
     <div class="row">
         <div id="messages" class="col-sm-12 col-md-10 col-lg-10 col-xl-8 offset-md-1 offset-lg-1 offset-xl-2 p-0" >
+            <#if model.error??>
+                <div class="alert alert-danger" role="alert">${model.error}</div>
+            </#if>
             <div class="card collapse show" data-toggle="collapse" data-parent="#messages">
                 <div class="card-body">
                     <div class="card-title">
                         <h3>${model.chat.name}</h3>
                         <div class="dropdown show">
                             <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Настройки
+                                Участников: ${model.chat.members?size}
                             </a>
-
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <div class="btn" data-toggle="modal" data-target="#addMember">
+                                <#list model.chat.members as member>
+                                    <div class="dropdown-item">
+                                        ${member.name}
+                                    </div>
+                                </#list>
+                                <div class="btn btn-sm" data-toggle="modal" data-target="#addMember">
                                     Добавить пользователя
                                 </div>
                             </div>
@@ -32,7 +39,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <input class="d-none" type="text" name="chatId" value=""${model.chat.id}">
+                                    <input class="d-none" type="text" name="chatId" value="${model.chat.id}">
                                     <input class="form-control" name="userName" placeholder="Логин пользователя">
                                 </div>
                                 <div class="modal-footer">

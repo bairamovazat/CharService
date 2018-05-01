@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.ivmiit.forms.AddChatForm;
 import ru.ivmiit.forms.AddMemberForm;
 import ru.ivmiit.forms.SendMessageForm;
@@ -57,11 +58,13 @@ public class ChatController {
 
     @GetMapping("/chat/{chatId}")
     public String getChatPage(@PathVariable("chatId") Long chatId,
-                          Authentication authentication,
-                          @ModelAttribute("model") ModelMap model) {
+                              Authentication authentication,
+                              @ModelAttribute("model") ModelMap model,
+                              @RequestParam(value = "error", required=false) String error){
+        model.addAttribute("error", error);
         User user = service.getUserByAuthentication(authentication);
         Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, chatId);
-        if(!chat.isPresent()){
+        if (!chat.isPresent()) {
             return "redirect:/chats?error";
         }
         model.addAttribute("chat", ChatDto.from(chat.get()));
@@ -86,14 +89,25 @@ public class ChatController {
     @PostMapping("/chats/add/member")
     public String addMember(@ModelAttribute("userForm") AddMemberForm addMemberForm,
                             Authentication authentication,
-                            @ModelAttribute("model") ModelMap model) {
+                            @ModelAttribute("model") ModelMap model,
+                            RedirectAttributes redirectAttributes) {
         User user = service.getUserByAuthentication(authentication);
         Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, addMemberForm.getChatId());
-        if(chat.isPresent()){
-            chatService.addMemberToChat(user,chat.get());
+        Optional<User> newMember = usersRepository.findOneByLogin(addMemberForm.getUserName());
+
+        if (!chat.isPresent()) {
+            redirectAttributes.addAttribute("error", "Чат не найден");
+            return "redirect:/chats";
+        } else if(chat.get().getMembers().contains(user)){
+            redirectAttributes.addAttribute("error", "Пользователь уже добавлен");
+            return "redirect:/chat/" + addMemberForm.getChatId();
+        } if (!newMember.isPresent()) {
+            redirectAttributes.addAttribute("error", "Неверный логин пользователя");
+            return "redirect:/chat/" + addMemberForm.getChatId();
+        } else {
+            chatService.addMemberToChat(newMember.get(), chat.get());
             return "redirect:/chats";
         }
-        return "redirect:/chats?error";
     }
 
     @PostMapping("/chats/send")
@@ -122,14 +136,14 @@ public class ChatController {
 
     @GetMapping("/chat/{chatId}/updates/")
     @ResponseBody
-    public List<MessageDto> longPoolMessageUpdate(@PathVariable("chatId")Long chatId, @RequestParam("lastMessageId")Long lastMessageId,
-                                           Authentication authentication, @ModelAttribute("model") ModelMap model) {
+    public List<MessageDto> longPoolMessageUpdate(@PathVariable("chatId") Long chatId, @RequestParam("lastMessageId") Long lastMessageId,
+                                                  Authentication authentication, @ModelAttribute("model") ModelMap model) {
         User user = service.getUserByAuthentication(authentication);
         Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, chatId);
         Optional<Message> message = messagesRepository.getMessageById(lastMessageId);
-        if(!chat.isPresent()){
+        if (!chat.isPresent()) {
             throw new IllegalArgumentException("bad chat id");
-        }else if(!message.isPresent()){
+        } else if (!message.isPresent()) {
             throw new IllegalArgumentException("bad message id");
         }
 
