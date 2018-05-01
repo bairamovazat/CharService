@@ -6,7 +6,6 @@ import ru.ivmiit.models.User;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface UsersRepository extends JpaRepository<User, Long> {
     Optional<User> findOneByLogin(String login);

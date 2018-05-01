@@ -40,10 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/chats")
                     .loginPage("/login")
                     .permitAll()
-                .and();
-//                .rememberMe()
-//                    .rememberMeParameter("remember-me")
-//                    .tokenRepository(tokenRepository());
+                .and()
+                .rememberMe()
+                    .rememberMeParameter("remember-me")
+                    .tokenRepository(tokenRepository());
         http.csrf().disable();
     }
 

@@ -8,15 +8,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.ivmiit.forms.UserRegistrationForm;
-import ru.ivmiit.models.State;
-import ru.ivmiit.models.User;
-import ru.ivmiit.repositories.UsersRepository;
 import ru.ivmiit.services.RegistrationService;
 import ru.ivmiit.validators.UserRegistrationFormValidator;
 
 import javax.validation.Valid;
-import java.util.Optional;
-import java.util.UUID;
 
 @Controller
 public class RegistrationController {

@@ -5,8 +5,10 @@ import ru.ivmiit.models.Chat;
 import ru.ivmiit.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChatsRepository extends JpaRepository<Chat, Long> {
     List<Chat> findByMembersContains(User user);
-    Chat findByMembersContainsAndId(User user, Long id);
+    Optional<Chat> findByMembersContainsAndId(User user, Long id);
+
 }

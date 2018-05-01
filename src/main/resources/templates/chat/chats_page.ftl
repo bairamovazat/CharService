@@ -1,112 +1,52 @@
 <#ftl encoding='UTF-8'>
 <#include "../header.ftl">
 <div class="container-fluid">
-<div class="row">
-    <div class="card col-sm-12 col-md-12 col-lg-4 col-xl-3 p-0">
-        <div class="card-body">
-            <h5 class="card-title">${model.userName} ваши диалоги:</h5>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 p-0 float-right">
+            <div class="card" data-toggle="modal" data-target="#addChat">
+                <div class="card-body text-center">
+                    <p class="card-text">Создайте новый чат</p>
+                    <div class="btn btn-primary btn-block">Добавить чат</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-10 col-xl-10 p-0">
             <#list model.chats as chat>
-                <div class="btn btn-light mb-3" data-toggle="collapse" data-target="#colapse-${chat.id}">
-                    ${chat.name}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="/chat/${chat.id}">${chat.name}</a></h5>
+                        <#if chat.messages[0]??>
+                        <p class="card-text">${chat.messages[0].user.name}: ${chat.messages[0].text}
+                            <small class="text-muted float-right">${chat.messages[0].sendDate}</small>
+                        </p>
+                        <#else>
+                            <p class="card-text">Пока нет сообщений.</p>
+                        </#if>
+                    </div>
                 </div>
             </#list>
-            <div class="btn btn-light mb-3" data-toggle="modal" data-target="#addChat">
-                Добавить чат
-            </div>
         </div>
+
     </div>
-    <div id="messages" class="col-sm-12 col-md-12 col-lg-8 col-xl-9 p-0">
-
-        <#list model.chats as chat>
-            <div id="colapse-${chat.id}" class="card collapse" data-parent="#messages">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h3>${chat.name}</h3>
-                        <div class="dropdown show">
-                            <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Настройки
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <div class="btn" data-toggle="modal" data-target="#addMember-${chat.id}">
-                                    Добавить пользователя
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Add user to chat-->
-
-                    <div class="modal fade" id="addMember-${chat.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <form class="modal-content" method="post" action="/chats/add/member">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Добавление пользователя</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <input class="d-none" type="text" name="chatId" value="${chat.id}">
-                                    <input class="form-control" name="userName" placeholder="Логин пользователя">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Добавить</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!--/Add user to chat-->
-
-                    <div class="card-title text-center">
-                        ${chat.name}
-                    </div>
-                    <#list chat.messages?sort_by("sendDate")?reverse as message>
-                        <div class="card-text mb-3">
-                            <small class="card-text text-left">
-                                ${message.user.name}
-                            </small>
-                            <small class="card-text text-muted float-right">
-                                ${message.sendDate}</small>
-                            <div class="card-text">
-                                ${message.text}
-                            </div>
-                        </div>
-                    </#list>
-                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-9 p-0" style="position: fixed; bottom: 0px; right: 0px;">
-                        <form name="messageForm" class="" method="post" action="/chats/send">
-                            <input class="d-none" type="text" name="chatId" value="${chat.id}">
-                            <textarea class="form-control" name="message" placeholder="Сообщение"></textarea>
-                            <input class="form-control" type="submit" value="Отправить">
-                        </form>
-                    </div>
-
+    <div class="modal fade" id="addChat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content" method="post" action="/chats/add">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Новый диалог</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-        </#list>
-
-        <div class="modal fade" id="addChat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form class="modal-content" method="post" action="/chats/add">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Новый диалог</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input class="form-control" type="text" name="name" placeholder="Название чата">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Добавить</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                    </div>
-                </form>
-            </div>
+                <div class="modal-body">
+                    <input class="form-control" type="text" name="name" placeholder="Название чата">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 </div>
 </body>
