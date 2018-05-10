@@ -31,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/chats").hasAuthority("USER")
                     .antMatchers("/signUp").permitAll()
-                    .antMatchers("/").authenticated()
                     .antMatchers("/admin").hasAuthority("ADMIN")
+                    .antMatchers("/static/js/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -41,11 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .permitAll()
                 .and()
+
                 .rememberMe()
                     .rememberMeParameter("remember-me")
                     .tokenRepository(tokenRepository());
         http.csrf().disable();
     }
+
 
     @Bean
     public PersistentTokenRepository tokenRepository(){

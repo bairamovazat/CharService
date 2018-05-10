@@ -1,5 +1,6 @@
 <#ftl encoding='UTF-8'>
 <#include "../header.ftl">
+<script type="text/javascript" src="/js/date.js"></script>
 <div class="container-fluid">
     <div class="row">
         <div id="messages" class="col-sm-12 col-md-10 col-lg-10 col-xl-8 offset-md-1 offset-lg-1 offset-xl-2 p-0">
@@ -55,7 +56,7 @@
                     </div>
                     <!--/Add user to chat-->
                     <!--Messages-->
-                    <div class="messages" style="overflow-y: auto; height:calc(100vh - 280px);">
+                    <div class="messages" id="messagesList" style="overflow-y: auto; height:calc(100vh - 280px);">
                        <#list model.chat.messages?sort_by("sendDate")?reverse as message>
                            <div class="card-text mb-3" id="message-${message.id}">
                                <small class="card-text text-left">
@@ -73,18 +74,23 @@
                     <!--/Messages-->
                 </div>
             </div>
-
         </div>
     </div>
     <div class="row p-0 m-0" style="position: fixed; bottom: 0px; left: 0px; width: 100%">
         <div class="col-sm-12 col-md-10 col-lg-10 col-xl-8 offset-md-1 offset-lg-1 offset-xl-2 p-0">
-            <form class="" method="post" action="/chats/send">
+            <form class="" id="messageForm" method="post" action="/chats/send">
                 <input class="d-none" type="text" name="chatId" value="${model.chat.id}">
                 <textarea class="form-control" name="message" placeholder="Сообщение"></textarea>
-                <input class="form-control" type="submit" value="Отправить">
+                <input class="form-control" id="messageSubmitBtn" type="button" value="Отправить">
             </form>
         </div>
     </div>
+    <script>
+        var chatId = ${model.chat.id};
+        //можно оптимизировать
+        var lastMessageId = ${model.chat.messages?sort_by("sendDate")?reverse[0].id};
+    </script>
+    <script type="text/javascript" src="/js/chat_page.js"></script>
 
 </div>
 </body>

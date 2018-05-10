@@ -1,6 +1,7 @@
 package ru.ivmiit.controlers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -110,28 +111,28 @@ public class ChatController {
         }
     }
 
-    @PostMapping("/chats/send")
-    public String sendMessage(@ModelAttribute("messageForm") SendMessageForm sendMessageForm,
-                              Authentication authentication,
-                              @ModelAttribute("model") ModelMap model) {
-        User user = service.getUserByAuthentication(authentication);
-        Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, sendMessageForm.getChatId());
-
-        if (!chat.isPresent() || user == null || sendMessageForm.getMessage() == null) {
-            return "redirect:/chats?error=true";
-
-        }
-        Message message = Message.builder()
-                .user(user)
-                .text(sendMessageForm.getMessage())
-                .sendDate(new Date())
-                .isRead(false)
-                .chat(chat.get())
-                .build();
-
-        messagesRepository.save(message);
-        return "redirect:/chat/" + sendMessageForm.getChatId();
-    }
+//    @PostMapping("/chats/send")
+//    public String sendMessage(@ModelAttribute("messageForm") SendMessageForm sendMessageForm,
+//                              Authentication authentication,
+//                              @ModelAttribute("model") ModelMap model) {
+//        User user = service.getUserByAuthentication(authentication);
+//        Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, sendMessageForm.getChatId());
+//
+//        if (!chat.isPresent() || user == null || sendMessageForm.getMessage() == null) {
+//            return "redirect:/chats?error=true";
+//
+//        }
+//        Message message = Message.builder()
+//                .user(user)
+//                .text(sendMessageForm.getMessage())
+//                .sendDate(new Date())
+//                .isRead(false)
+//                .chat(chat.get())
+//                .build();
+//
+//        messagesRepository.save(message);
+//        return "redirect:/chat/" + sendMessageForm.getChatId();
+//    }
 
 
     @GetMapping("/chat/{chatId}/updates/")
@@ -147,9 +148,34 @@ public class ChatController {
             throw new IllegalArgumentException("bad message id");
         }
 
-        chatService.waitNewMessages(chat.get(), message.get());
+        List<Message> messages = chatService.waitNewMessages(chat.get(), message.get());
+        return from(messages);
+    }
 
-        return from(messagesRepository.getMessagesByChatAndIdAfter(chat.get(), lastMessageId));
+    @PostMapping("/chat/send/")
+    @ResponseBody
+    public ResponseEntity<String> sendMessage(@RequestBody SendMessageForm sendMessageForm,
+                                      Authentication authentication,
+                                      @ModelAttribute("model") ModelMap model) throws IllegalArgumentException{
+        User user = service.getUserByAuthentication(authentication);
+        Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, sendMessageForm.getChatId());
+        if (!chat.isPresent()) {
+            throw new IllegalArgumentException("bad chat id");
+        }else if(sendMessageForm.getMessage().isEmpty()){
+            throw new IllegalArgumentException("message is empty");
+        }
+
+        Message message = Message.builder()
+                .user(user)
+                .text(sendMessageForm.getMessage())
+                .sendDate(new Date())
+                .isRead(false)
+                .chat(chat.get())
+                .build();
+
+        messagesRepository.save(message);
+
+        return ResponseEntity.ok("{\"success\":\"success\"}");
     }
 
 }
