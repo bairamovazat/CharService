@@ -85,12 +85,15 @@
             </form>
         </div>
     </div>
+    <script type="text/javascript" src="/js/chat_page.js"></script>
     <script>
         var chatId = ${model.chat.id};
         //можно оптимизировать
-        var lastMessageId = ${model.chat.messages?sort_by("sendDate")?reverse[0].id};
+        <#if model.chat.messages??>
+            var lastMessageId = ${model.chat.messages?sort_by("sendDate")?reverse[0].id};
+        <#else>
+            var lastMessageId = -1;
+        </#if>
     </script>
-    <script type="text/javascript" src="/js/chat_page.js"></script>
-
 </div>
 </body>
