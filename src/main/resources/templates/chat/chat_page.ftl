@@ -89,7 +89,7 @@
     <script>
         var chatId = ${model.chat.id};
         //можно оптимизировать
-        <#if model.chat.messages??>
+        <#if model.chat.messages?? && model.chat.messages.length > 0>
             var lastMessageId = ${model.chat.messages?sort_by("sendDate")?reverse[0].id};
         <#else>
             var lastMessageId = -1;
