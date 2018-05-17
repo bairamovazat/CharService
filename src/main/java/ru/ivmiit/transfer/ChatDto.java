@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class ChatDto {
     private Long id;
     private String name;
-    private User owner;
+    private UserDto owner;
     private List<MessageDto> messages;
     private List<UserDto> members;
 
@@ -25,7 +25,7 @@ public class ChatDto {
         return ChatDto.builder()
                 .id(chat.getId())
                 .name(chat.getName())
-                .owner(chat.getOwner())
+                .owner(UserDto.from(chat.getOwner()))
                 .messages(MessageDto.from(chat.getMessages()))
                 .members(UserDto.from(chat.getMembers()))
                 .build();

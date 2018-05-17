@@ -141,13 +141,19 @@ public class ChatController {
                                                   Authentication authentication, @ModelAttribute("model") ModelMap model) {
         User user = service.getUserByAuthentication(authentication);
         Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, chatId);
-        Optional<Message> message = messagesRepository.getMessageById(lastMessageId);
         if (!chat.isPresent()) {
             throw new IllegalArgumentException("bad chat id");
-        } else if (!message.isPresent()) {
-            throw new IllegalArgumentException("bad message id");
+        }
+        //если требуются все сообщени
+        if(lastMessageId == -1){
+            List<Message> messages = chatService.waitNewMessages(chat.get(), Message.builder().id(-1L).build());
+            return from(messages);
         }
 
+        Optional<Message> message = messagesRepository.getMessageById(lastMessageId);
+        if (!message.isPresent()) {
+            throw new IllegalArgumentException("bad message id");
+        }
         List<Message> messages = chatService.waitNewMessages(chat.get(), message.get());
         return from(messages);
     }

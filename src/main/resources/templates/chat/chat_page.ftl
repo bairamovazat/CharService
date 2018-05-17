@@ -57,19 +57,19 @@
                     <!--/Add user to chat-->
                     <!--Messages-->
                     <div class="messages" id="messagesList" style="overflow-y: auto; height:calc(100vh - 280px);">
-                       <#list model.chat.messages?sort_by("sendDate")?reverse as message>
-                           <div class="card-text mb-3" id="message-${message.id}">
-                               <small class="card-text text-left">
-                                   ${message.user.name}
-                               </small>
-                               <small class="card-text text-muted float-right">
-                                   ${message.sendDate}
-                               </small>
-                               <div class="card-text">
-                                   ${message.text}
-                               </div>
-                           </div>
-                       </#list>
+                       <#--<#list model.chat.messages?sort_by("sendDate")?reverse as message>-->
+                           <#--<div class="card-text mb-3" id="message-${message.id}">-->
+                               <#--<small class="card-text text-left">-->
+                                   <#--${message.user.name}-->
+                               <#--</small>-->
+                               <#--<small class="card-text text-muted float-right">-->
+                                   <#--${message.sendDate}-->
+                               <#--</small>-->
+                               <#--<div class="card-text">-->
+                                   <#--${message.text}-->
+                               <#--</div>-->
+                           <#--</div>-->
+                       <#--</#list>-->
                     </div>
                     <!--/Messages-->
                 </div>
@@ -85,15 +85,12 @@
             </form>
         </div>
     </div>
-    <script type="text/javascript" src="/js/chat_page.js"></script>
     <script>
         var chatId = ${model.chat.id};
-        //можно оптимизировать
-        <#if model.chat.messages?? && model.chat.messages.length > 0>
-            var lastMessageId = ${model.chat.messages?sort_by("sendDate")?reverse[0].id};
-        <#else>
-            var lastMessageId = -1;
-        </#if>
     </script>
+    <script>
+        var lastMessageId = -1;
+    </script>
+    <script type="text/javascript" src="/js/chat_page.js"></script>
 </div>
 </body>
