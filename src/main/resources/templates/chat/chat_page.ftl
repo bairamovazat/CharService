@@ -81,9 +81,7 @@
             <form class="" id="messageForm" method="post" action="/chats/send">
                 <input class="d-none" type="text" name="chatId" value="${model.chat.id}">
                 <div style="display: flex; flex-direction: row">
-                    <textarea style="width: 80%; resize: none" class="form-control" name="message" placeholder="Сообщение">
-
-                    </textarea>
+                    <textarea style="width: 80%; resize: none" class="form-control" name="message" placeholder="Сообщение"></textarea>
                     <div style="width: 20%; text-align: center; align-content: center;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadFile">
                         Файл
                     </div>
