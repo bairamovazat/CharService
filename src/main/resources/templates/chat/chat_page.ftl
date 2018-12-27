@@ -86,8 +86,6 @@
                         Файл
                     </div>
                 </div>
-
-
                 <input class="form-control" id="messageSubmitBtn" type="button" value="Отправить">
             </form>
         </div>
