@@ -57,19 +57,19 @@
                     <!--/Add user to chat-->
                     <!--Messages-->
                     <div class="messages" id="messagesList" style="overflow-y: auto; height:calc(100vh - 280px);">
-                       <#--<#list model.chat.messages?sort_by("sendDate")?reverse as message>-->
-                           <#--<div class="card-text mb-3" id="message-${message.id}">-->
-                               <#--<small class="card-text text-left">-->
-                                   <#--${message.user.name}-->
-                               <#--</small>-->
-                               <#--<small class="card-text text-muted float-right">-->
-                                   <#--${message.sendDate}-->
-                               <#--</small>-->
-                               <#--<div class="card-text">-->
-                                   <#--${message.text}-->
-                               <#--</div>-->
-                           <#--</div>-->
-                       <#--</#list>-->
+                    <#--<#list model.chat.messages?sort_by("sendDate")?reverse as message>-->
+                    <#--<div class="card-text mb-3" id="message-${message.id}">-->
+                    <#--<small class="card-text text-left">-->
+                    <#--${message.user.name}-->
+                    <#--</small>-->
+                    <#--<small class="card-text text-muted float-right">-->
+                    <#--${message.sendDate}-->
+                    <#--</small>-->
+                    <#--<div class="card-text">-->
+                    <#--${message.text}-->
+                    <#--</div>-->
+                    <#--</div>-->
+                    <#--</#list>-->
                     </div>
                     <!--/Messages-->
                 </div>
@@ -80,17 +80,53 @@
         <div class="col-sm-12 col-md-10 col-lg-10 col-xl-8 offset-md-1 offset-lg-1 offset-xl-2 p-0">
             <form class="" id="messageForm" method="post" action="/chats/send">
                 <input class="d-none" type="text" name="chatId" value="${model.chat.id}">
-                <textarea class="form-control" name="message" placeholder="Сообщение"></textarea>
+                <div style="display: flex; flex-direction: row">
+                    <textarea style="width: 80%; resize: none" class="form-control" name="message" placeholder="Сообщение">
+
+                    </textarea>
+                    <div style="width: 20%; text-align: center; align-content: center;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadFile">
+                        Файл
+                    </div>
+                </div>
+
+
                 <input class="form-control" id="messageSubmitBtn" type="button" value="Отправить">
             </form>
         </div>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="uploadFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Добавить файл в чат</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="file" id="uploadFileInput" class="btn btn-default">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="fileSubmitBtn" data-dismiss="modal" class="btn btn-primary">Загрузить</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var chatId = ${model.chat.id};
     </script>
+
     <script>
         var lastMessageId = -1;
     </script>
+
     <script type="text/javascript" src="/js/chat_page.js"></script>
 </div>
 </body>

@@ -11,6 +11,7 @@ import ru.ivmiit.repositories.MessagesRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -62,5 +63,13 @@ public class ChatServiceImpl implements ChatService {
             }
         });
 
+    }
+
+    @Override
+    public void addToGeneralChat(User user){
+        chatsRepository.findById(1L).ifPresent(c -> {
+            c.getMembers().add(user);
+            chatsRepository.save(c);
+        });
     }
 }

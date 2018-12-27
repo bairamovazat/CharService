@@ -12,4 +12,6 @@ public interface ChatService {
     List<Message> waitNewMessages(Chat chat, Message message);
 
     void keepFirstMessageInChats(List<Chat> chats);
+
+    void addToGeneralChat(User user);
 }

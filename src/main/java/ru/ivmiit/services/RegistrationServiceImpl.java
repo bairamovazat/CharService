@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ivmiit.forms.UserRegistrationForm;
 import ru.ivmiit.models.Role;
 import ru.ivmiit.models.State;
@@ -25,9 +26,13 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private ChatService chatService;
+
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
+    @Transactional
     public void register(UserRegistrationForm userForm) {
         UUID uuid = UUID.randomUUID();
         User newUser = User.builder()
@@ -39,5 +44,12 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .name(userForm.getName())
                 .build();
         usersRepository.save(newUser);
+        chatService.addToGeneralChat(newUser);
+    }
+
+    @Override
+    @Transactional
+    public void setNewPassword(User user, String password){
+        user.setHashPassword(passwordEncoder.encode(password));
     }
 }

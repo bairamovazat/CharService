@@ -22,11 +22,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(@ModelAttribute("model") ModelMap model, Authentication authentication,
-                        @RequestParam Optional<String> error) {
+                        @RequestParam(required = false) String error) {
         if (authentication != null) {
             return "redirect:/";
         }
-        model.addAttribute("error", error);
+        if(error != null) {
+            model.addAttribute("error", "Неверны данные авторизации");
+        }
         return "login";
     }
 
@@ -45,7 +47,7 @@ public class AuthController {
             if (user.getRole().equals(Role.USER)) {
                 return "redirect:/chats";
             } else if (user.getRole().equals(Role.ADMIN)) {
-                return "redirect:/admin/";
+                return "redirect:/admin/index";
             }
         }
         return "redirect:/login";

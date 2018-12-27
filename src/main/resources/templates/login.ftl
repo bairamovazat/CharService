@@ -1,6 +1,9 @@
 <#ftl encoding='UTF-8'>
 <#include "header.ftl">
     <div class="col-sm-12 col-md-10 col-lg-6 col-xl-6 offset-lg-1 offset-xl-1">
+        <#if model.error??  && model.error != "">
+            <div class="alert alert-danger" role="alert">${model.error}</div>
+        </#if>
         <form action="/login" method="post">
             <div class="form-group">
                 <label for="login">Логин</label>

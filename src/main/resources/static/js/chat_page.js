@@ -1,6 +1,9 @@
 function main() {
     var messagesBlock = document.getElementById("messagesList");
     var messageSubmitBtn = document.getElementById("messageSubmitBtn");
+    var fileSubmitBtn = document.getElementById("fileSubmitBtn");
+    var uploadFileInput = document.getElementById("uploadFileInput");
+
     var messageForm = document.getElementById("messageForm");
     function waitNewMessages() {
         var xhr = new XMLHttpRequest();
@@ -56,10 +59,12 @@ function main() {
     }
 
     messageSubmitBtn.onclick = function() {
-        if(messageForm["message"].value.length === 0){
+        var message = messageForm["message"].value.trim();
+
+        if(message.length === 0){
             return false;
         }
-        sendMessage(chatId, messageForm["message"].value);
+        sendMessage(chatId, message);
         messageForm.reset();
         return false;
     };
@@ -80,6 +85,40 @@ function main() {
         };
         xhr.send(JSON.stringify({"chatId":chatId, "message":message}));
     }
+
+    fileSubmitBtn.onclick = function() {
+        if(uploadFileInput.value == undefined || uploadFileInput.value.length <= 0){
+            return false;
+        }
+
+        sendFile(chatId, messageForm["message"].value);
+        uploadFileInput.value = "";
+        return false;
+    };
+
+    function sendFile(chatId, message) {
+        var formData = new FormData();
+
+        formData.append("file", uploadFileInput.files[0]);
+
+        formData.append("chatId", chatId);
+        formData.append("message", message);
+
+        var xhr = new XMLHttpRequest();
+        var url = "/chat/send-file/";
+        xhr.open("POST", url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState != 4) return;
+
+            if (xhr.status != 200) {
+                console.log(xhr.status + ': ' + xhr.statusText);
+            } else if (xhr.responseText.length > 0) {
+                console.log(xhr.responseText);
+            }
+        };
+        xhr.send(formData);
+    }
+
     waitNewMessages();
 }
 main();
