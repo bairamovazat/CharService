@@ -1,6 +1,7 @@
 package ru.ivmiit.transfer;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class MessageDto {
     private String text;
     private Boolean isRead;
     private UserDto user;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
     private Date sendDate;
 
 

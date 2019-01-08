@@ -118,29 +118,6 @@ public class ChatController {
         }
     }
 
-//    @PostMapping("/chats/send")
-//    public String sendMessage(@ModelAttribute("messageForm") SendMessageForm sendMessageForm,
-//                              Authentication authentication,
-//                              @ModelAttribute("model") ModelMap model) {
-//        User user = service.getUserByAuthentication(authentication);
-//        Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, sendMessageForm.getChatId());
-//
-//        if (!chat.isPresent() || user == null || sendMessageForm.getMessage() == null) {
-//            return "redirect:/chats?error=true";
-//
-//        }
-//        Message message = Message.builder()
-//                .user(user)
-//                .text(sendMessageForm.getMessage())
-//                .sendDate(new Date())
-//                .isRead(false)
-//                .chat(chat.get())
-//                .build();
-//
-//        messagesRepository.save(message);
-//        return "redirect:/chat/" + sendMessageForm.getChatId();
-//    }
-
 
     @GetMapping("/chat/{chatId}/updates/")
     @ResponseBody
@@ -168,8 +145,7 @@ public class ChatController {
     @PostMapping("/chat/send/")
     @ResponseBody
     public ResponseEntity<String> sendMessage(@RequestBody SendMessageForm sendMessageForm,
-                                      Authentication authentication,
-                                      @ModelAttribute("model") ModelMap model) throws IllegalArgumentException{
+                                      Authentication authentication) throws IllegalArgumentException{
         User user = service.getUserByAuthentication(authentication);
         Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, sendMessageForm.getChatId());
         if (!chat.isPresent()) {
