@@ -39,12 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                     .usernameParameter("login")
-                    .defaultSuccessUrl("/chats")
                     .loginPage("/login")
                     .permitAll()
-                .successHandler((request, response, auth) -> {
-                    response.addCookie(new Cookie("success", "ok"));
-                })
+                    .successHandler((request, response, auth) -> {
+                        response.addCookie(new Cookie("success", "ok"));
+                        response.sendRedirect("/chats");
+                    })
                 .and()
                 .rememberMe()
                     .rememberMeParameter("remember-me")
