@@ -42,9 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .permitAll()
                     .successHandler((request, response, auth) -> {
-                        response.addCookie(new Cookie("success", "ok"));
+                        response.addCookie(new Cookie("success_login", "ok"));
                         response.sendRedirect("/chats");
                     })
+                .and()
+                .logout()
+                    .deleteCookies("success_login", "JSESSIONID")
                 .and()
                 .rememberMe()
                     .rememberMeParameter("remember-me")
