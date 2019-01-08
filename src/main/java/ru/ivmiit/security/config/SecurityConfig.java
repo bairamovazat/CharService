@@ -8,10 +8,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import ru.ivmiit.utils.PasswordEncoderUtils;
 
+import javax.servlet.http.Cookie;
 import javax.sql.DataSource;
 
 
@@ -40,8 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/chats")
                     .loginPage("/login")
                     .permitAll()
+                .successHandler((request, response, auth) -> {
+                    response.addCookie(new Cookie("success", "ok"));
+                })
                 .and()
-
                 .rememberMe()
                     .rememberMeParameter("remember-me")
                     .tokenRepository(tokenRepository());
@@ -55,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(PasswordEncoderUtils.getBCryptPasswordEncoder());
