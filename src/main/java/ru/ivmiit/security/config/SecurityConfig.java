@@ -43,6 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .successHandler((request, response, auth) -> {
                         Cookie cookie = new Cookie("success_login", "ok");
+                        cookie.setPath("/");
+                        cookie.setSecure(true);
+                        cookie.setHttpOnly(true);
                         response.addCookie(cookie);
                         response.sendRedirect("/chats");
                     })
