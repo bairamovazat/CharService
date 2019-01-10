@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.ivmiit.forms.AddChatForm;
+import ru.ivmiit.forms.AddMemberForm;
 import ru.ivmiit.forms.SendMessageForm;
 import ru.ivmiit.models.Chat;
 import ru.ivmiit.models.Message;
@@ -18,10 +19,7 @@ import ru.ivmiit.services.ChatService;
 import ru.ivmiit.services.FileService;
 import ru.ivmiit.transfer.ChatDto;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -67,8 +65,8 @@ public class ApiController {
     }
 
 
-    @PostMapping("/chats/add")
-    public ResponseEntity addChat(@ModelAttribute("userForm") AddChatForm addChatForm,
+    @PostMapping("/chat/add")
+    public ResponseEntity<String> addChat(@RequestBody AddChatForm addChatForm,
                           Authentication authentication) {
         User user = service.getUserByAuthentication(authentication);
         Chat chat = Chat.builder()
@@ -103,6 +101,33 @@ public class ApiController {
         messagesRepository.save(message);
 
         return ResponseEntity.ok(null);
+    }
+
+
+    @PostMapping("/chat/add/member")
+    public ResponseEntity<String> addMember(@RequestBody AddMemberForm addMemberForm,
+                            Authentication authentication) {
+        User user = service.getUserByAuthentication(authentication);
+        Optional<Chat> chat = chatsRepository.findByMembersContainsAndId(user, addMemberForm.getChatId());
+        Optional<User> newMember = usersRepository.findOneByLogin(addMemberForm.getUserName());
+
+        String error = null;
+        if (!newMember.isPresent()) {
+            error = "Неверный логин пользователя";
+        } else if (!chat.isPresent()) {
+            error = "Чат не найден";
+        } else if(chat.get().getMembers().contains(newMember.get())){
+            error = "Пользователь уже добавлен";
+        }else {
+            chatService.addMemberToChat(newMember.get(), chat.get());
+        }
+
+        if(error != null){
+            return ResponseEntity.badRequest().body(error);
+        }else {
+            return ResponseEntity.ok(null);
+        }
+
     }
 
 }
